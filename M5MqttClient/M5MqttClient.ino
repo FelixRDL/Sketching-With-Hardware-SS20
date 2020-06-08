@@ -1,6 +1,11 @@
 #include <M5Stack.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+/**
+ * Json tutorial übernommen aus https://randomnerdtutorials.com/decoding-and-encoding-json-with-arduino-or-esp8266/
+ */
+#include <ArduinoJson.h>
+StaticJsonDocument<512> jsonDoc;
 const char* SSID = "REDACTED";
 const char* PW = "REDACTED";
 const char* MQTT_BROKER = "REDACTED";
@@ -57,8 +62,8 @@ void setup_mqtt() {
         }
     }
     mqtt.subscribe("/chat");
-    Serial.println("MQTT Connected...");
-    mqtt.publish("/chat", "Hallo in die Runde! :)");
+    char json[] = "{\"message\":\"Hi together\",\"author\":\"M5StackCore\"}"; 
+    mqtt.publish("/chat", json);
 }
 
 // the loop routine runs over and over again forever
@@ -78,8 +83,13 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
 
     msg[length] = '\0';
 
+    deserializeJson(jsonDoc, msg);
     M5.Lcd.print(">");   
     M5.Lcd.println(topic);
-    M5.Lcd.print(">  ");   
-    M5.Lcd.println(msg);
+    M5.Lcd.print("> message: ");      
+    const char* message= jsonDoc["message"]; 
+    M5.Lcd.println(message);
+    M5.Lcd.print("> author: ");      
+    const char* author = jsonDoc["author"]; 
+    M5.Lcd.println(author);
 }
