@@ -8,6 +8,7 @@
 - Docker-Compose-Image klonen von https://github.com/thelebster/example-mosquitto-simple-auth-docker
 - Im .env File sollte das Passwort des mosquitto users geändert werden
 - In ./conf/mosquitto.conf muss der Wert für ```password_file``` auf ```/mosquitto/config/mosquitto.passwd``` gesetzt werden
+- Im ./conf/mosquitto.conf sollte ```allow_anonymous``` auf ```false``` gesetzt werden
 - Über ```docker-compose build``` und ```docker-compose up -d```wird der Server gebuildet und als Daemon ausgeführt
 
 ### User anlegen
